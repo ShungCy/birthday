@@ -58,6 +58,8 @@ h1,h2{ font-family:'Playfair Display', serif; margin:0 0 10px; text-align:center
   font-style: italic;
   letter-spacing:.3px;
   opacity:.92;
+  max-width: 92vw;
+  overflow-wrap: break-word;
 }
 .stage-3 .hint, .stage-4 .hint{ color:#7a3b52; }
 
@@ -286,69 +288,97 @@ button.next-btn:active{ transform: translateY(0) scale(.98); }
 .quiz-feedback{ min-height: 22px; margin-top:14px; font-size:14px; font-weight:600; color:#3f9d6c; }
 
 /* ============ STAGE 4 : GACHA ============ */
-.machine-wrap{ display:flex; flex-direction:column; align-items:center; }
-.machine{ position:relative; width: 200px; }
-.dome{
-  width: 180px; height: 150px; margin:0 auto;
-  border-radius: 50% 50% 46% 46% / 60% 60% 40% 40%;
-  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.85), rgba(190,225,255,.35) 60%, rgba(150,200,240,.25));
-  border: 6px solid #e8effa;
-  box-shadow: inset 0 -10px 20px rgba(0,0,0,.08), 0 10px 20px rgba(0,0,0,.15);
-  position:relative; overflow:hidden;
-  transform-origin: 50% 100%;
+.machine-wrap{ display:flex; flex-direction:column; align-items:center; width:100%; }
+.machine{
+  position:relative; width: 230px; max-width: 84vw;
+  background: linear-gradient(180deg, #f3f4f6, #e3e6ea);
+  border: 5px solid #7b8494;
+  border-radius: 34px 34px 16px 16px;
+  padding: 16px 16px 20px;
+  box-shadow: 0 14px 26px rgba(0,0,0,.18);
 }
-.dome.shake{ animation: machineShake .6s ease; }
+.vend-window{
+  position:relative; height: 170px;
+  background: linear-gradient(135deg, #c3cbdc, #e8edf5);
+  border: 4px solid #7b8494; border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.vend-window::after{
+  content:''; position:absolute; top:-20%; left:60%; width:40%; height:140%;
+  background: rgba(255,255,255,.35);
+  transform: rotate(20deg);
+  pointer-events:none;
+}
+.vend-window.shake{ animation: machineShake .5s ease; }
 @keyframes machineShake{
-  0%,100%{ transform: rotate(0); }
-  20%{ transform: rotate(-3deg); }
-  40%{ transform: rotate(3deg); }
-  60%{ transform: rotate(-2deg); }
-  80%{ transform: rotate(2deg); }
+  0%,100%{ transform: translateX(0); }
+  25%{ transform: translateX(-4px); }
+  50%{ transform: translateX(4px); }
+  75%{ transform: translateX(-3px); }
 }
-.capsule-static{
-  position:absolute; width:22px; height:22px; border-radius:50%;
-  box-shadow: inset -3px -3px 0 rgba(0,0,0,.08);
+.cap-item{
+  position:absolute; width:50px; height:50px; border-radius:50%;
+  border: 3px solid #5c6270; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; background:#fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
 }
-.body-box{
-  width: 200px; height: 90px; margin-top: -8px;
-  background: linear-gradient(180deg, #ff8fa3, #e5637f);
-  border-radius: 14px;
-  position:relative;
-  box-shadow: 0 10px 18px rgba(0,0,0,.18);
+.cap-item::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:52%;
+  background: var(--cap-color);
 }
-.body-box::before{
-  content:''; position:absolute; top:14px; left:50%; transform:translateX(-50%);
-  width: 46px; height: 46px; border-radius:50%;
-  background: #fff3f6; box-shadow: inset 0 0 0 4px #ffd6e0, inset 0 4px 8px rgba(0,0,0,.15);
+.cap-item span{ position:relative; z-index:1; }
+.cap1{ top:8px; left:6px; --cap-color:#79c6e8; }
+.cap2{ top:2px; left:60px; --cap-color:#f5a0d6; }
+.cap3{ top:16px; left:118px; --cap-color:#9bd66b; z-index:2; }
+.cap4{ top:64px; left:38px; --cap-color:#ffcf4d; }
+.cap5{ top:58px; left:96px; --cap-color:#79c6e8; }
+.cap6{ top:52px; right:4px; --cap-color:#f5a0d6; }
+
+.controls-row{ display:flex; align-items:flex-end; gap:14px; }
+.push-button{
+  flex: 1; height: 68px; padding:0;
+  background: linear-gradient(180deg, #ff7268, #e6483f);
+  border: 4px solid #7b8494; border-radius: 12px;
+  box-shadow: inset 0 -8px 0 rgba(0,0,0,.18), 0 4px 0 rgba(0,0,0,.1);
+  cursor:pointer; transition: transform .12s ease, box-shadow .12s ease;
 }
-.slot{
-  position:absolute; bottom: 14px; left:50%; transform:translateX(-50%);
-  width: 54px; height: 8px; background:#7a2f43; border-radius: 3px;
+.push-button:not(:disabled):active{
+  transform: translateY(4px);
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,.18);
 }
-.dispenser{
-  width: 60px; height: 22px; margin: 0 auto; background:#c94f68; border-radius: 0 0 10px 10px;
+.push-button:disabled{ opacity:.45; cursor:not-allowed; }
+.knob-col{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+.twist-knob{
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #e6483f; border: 3px solid #7b8494;
+  position:relative; overflow:hidden;
 }
+.twist-knob::after{
+  content:''; position:absolute; top:50%; left:-15%; width:130%; height:7px;
+  background: rgba(255,255,255,.55); transform: translateY(-50%) rotate(-28deg);
+}
+.digital-display{
+  background: #333a47; border: 3px solid #7b8494; border-radius: 6px;
+  padding: 3px 10px; min-width: 30px; text-align:center;
+  color:#bfe4ff; font-family:'Poppins', sans-serif; font-weight:700; font-size:16px;
+  letter-spacing: 1px;
+}
+
 .capsule-drop{
-  position: absolute; top: 40%; left:50%; width:26px; height:26px; border-radius:50%;
+  position: absolute; top: 50%; left:50%; width:24px; height:24px; border-radius:50%;
   transform: translate(-50%,-50%) scale(0);
-  z-index: 30;
+  z-index: 30; border: 2px solid #5c6270;
 }
-.capsule-drop.play{ animation: dropFall 1.1s cubic-bezier(.4,.6,.3,1) forwards; }
+.capsule-drop.play{ animation: dropFall .9s cubic-bezier(.4,.6,.3,1) forwards; }
 @keyframes dropFall{
-  0%{ transform: translate(-50%,-90px) scale(1); opacity:1;}
-  70%{ transform: translate(-50%, 150px) scale(1); opacity:1;}
-  85%{ transform: translate(-50%, 150px) scale(1.15) rotate(20deg); }
-  100%{ transform: translate(-50%, 150px) scale(0); opacity:0;}
+  0%{ transform: translate(-50%,-40px) scale(1); opacity:1;}
+  60%{ transform: translate(-50%, 130px) scale(1); opacity:1;}
+  80%{ transform: translate(-50%, 130px) scale(1.15) rotate(20deg); }
+  100%{ transform: translate(-50%, 130px) scale(0); opacity:0;}
 }
-.spin-btn{
-  margin-top: 26px; padding: 13px 30px; border:none; border-radius: 40px;
-  background: linear-gradient(135deg,#ff8fa3,#ffc36e); color:#fff; font-weight:600;
-  font-size:15px; cursor:pointer; box-shadow: 0 8px 20px rgba(230,100,130,.35);
-  transition: all .25s ease;
-}
-.spin-btn:disabled{ opacity:.4; cursor:not-allowed; box-shadow:none; }
-.spin-btn:not(:disabled):hover{ transform: translateY(-2px); }
-.gacha-coins{ margin-top:14px; font-size:14px; color:#a3395a; font-weight:600; }
+.gacha-coins{ margin-top:18px; font-size:14px; color:#a3395a; font-weight:600; }
 
 .coupon-overlay{
   position:fixed; inset:0; background:rgba(60,20,35,.55); z-index:60;
@@ -448,25 +478,28 @@ button.next-btn:active{ transform: translateY(0) scale(.98); }
 <!-- STAGE 4 -->
 <div class="stage" id="stage4">
   <h2 style="color:#a3395a;">🎁 Máquina da Sorte</h2>
-  <p class="hint">Cada giro custa 1 moeda do amor. Você tem 3 giros!</p>
+  <p class="hint">Aperte o botão vermelho para girar — cada giro custa 1 moeda do amor!</p>
   <div class="machine-wrap">
     <div class="machine">
-      <div class="dome" id="dome">
-        <div class="capsule-static" style="background:#ffd23f; top:14px; left:20px;"></div>
-        <div class="capsule-static" style="background:#6fd6c9; top:40px; left:70px;"></div>
-        <div class="capsule-static" style="background:#ff8fa3; top:20px; left:120px;"></div>
-        <div class="capsule-static" style="background:#b8a4ff; top:70px; left:30px;"></div>
-        <div class="capsule-static" style="background:#e0555b; top:60px; left:110px;"></div>
-        <div class="capsule-static" style="background:#f2994a; top:90px; left:70px;"></div>
+      <div class="vend-window" id="dome">
+        <div class="cap-item cap1"><span>🤗</span></div>
+        <div class="cap-item cap2"><span>💆</span></div>
+        <div class="cap-item cap3"><span>🎬</span></div>
+        <div class="cap-item cap4"><span>🌟</span></div>
+        <div class="cap-item cap5"><span>💗</span></div>
+        <div class="cap-item cap6"><span>🎁</span></div>
         <div class="capsule-drop" id="capsuleDrop"></div>
       </div>
-      <div class="body-box">
-        <div class="slot"></div>
+      <div class="controls-row">
+        <button class="push-button" id="pushButton" onclick="spinGacha()" aria-label="Girar"></button>
+        <div class="knob-col">
+          <div class="twist-knob"></div>
+          <div class="digital-display" id="digitalDisplay">3</div>
+        </div>
       </div>
-      <div class="dispenser"></div>
     </div>
-    <button class="spin-btn" id="spinBtn" onclick="spinGacha()">🎰 Começar a girar</button>
     <div class="gacha-coins" id="gachaCoins">Moedas restantes: 3</div>
+
   </div>
 </div>
 
@@ -704,9 +737,9 @@ const prizePool = [
 let remainingPrizes = [];
 
 const stage4Observer = new MutationObserver(()=>{
-  if(document.getElementById('stage4').classList.contains('active') && gachaCoins === 0 && !spinning && document.getElementById('spinBtn').dataset.init !== '1'){
+  if(document.getElementById('stage4').classList.contains('active') && gachaCoins === 0 && !spinning && document.getElementById('pushButton').dataset.init !== '1'){
     gachaCoins = coins > 0 ? coins : 3;
-    document.getElementById('spinBtn').dataset.init = '1';
+    document.getElementById('pushButton').dataset.init = '1';
     remainingPrizes = [...prizePool];
     updateGachaDisplay();
   }
@@ -715,10 +748,8 @@ stage4Observer.observe(document.getElementById('stage4'), {attributes:true, attr
 
 function updateGachaDisplay(){
   document.getElementById('gachaCoins').textContent = `Moedas restantes: ${gachaCoins}`;
-  document.getElementById('spinBtn').disabled = gachaCoins <= 0;
-  if(gachaCoins <= 0){
-    document.getElementById('spinBtn').textContent = 'Sem moedas 💤';
-  }
+  document.getElementById('digitalDisplay').textContent = gachaCoins;
+  document.getElementById('pushButton').disabled = gachaCoins <= 0;
 }
 
 function spinGacha(){
