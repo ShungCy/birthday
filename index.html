@@ -86,16 +86,21 @@ button.next-btn:hover{ transform: translateY(-3px) scale(1.04); box-shadow: 0 12
 button.next-btn:active{ transform: translateY(0) scale(.98); }
 
 /* ============ STAGE 1 : CAKE ============ */
+@import url(https://fonts.googleapis.com/css?family=Lato:300italic);
+
 .cake-wrap{ position:relative; cursor:pointer; user-select:none; }
+
+/* Centraliza e posiciona o bolo tridimensional */
 .cake{
   position:relative;
   width: 220px;
-  margin-top: 46px;
-  padding-bottom: 14px;
+  margin: 20px auto 14px auto;
   filter: drop-shadow(0 16px 24px rgba(0,0,0,.35));
   transition: transform .3s ease;
+  display: block;
 }
 .cake-wrap:hover .cake{ transform: scale(1.02); }
+
 .plate{
   width: 230px; height: 6px; margin: 0 auto;
   background: linear-gradient(180deg, #fff, #e9e3f5);
@@ -112,8 +117,7 @@ button.next-btn:active{ transform: translateY(0) scale(.98); }
 }
 .drip{
   position:absolute; left:0; right:0; bottom:-11px; height:15px;
-  background:
-    radial-gradient(circle at 16% 0, transparent 7px, #fffaf1 8px) top left/22px 15px repeat-x;
+  background: radial-gradient(circle at 16% 0, transparent 7px, #fffaf1 8px) top left/22px 15px repeat-x;
 }
 .tier{
   width: 100%;
@@ -125,28 +129,88 @@ button.next-btn:active{ transform: translateY(0) scale(.98); }
 .tier-mid{ width: 172px; height: 48px; background: #f0aeb0; }
 .tier-bottom{ width: 214px; height: 54px; background: #de8593; border-radius: 4px 4px 6px 6px; }
 
-.candles{
-  position:absolute; top:-40px; left:50%; transform:translateX(-50%);
-  display:flex; gap:22px; z-index:3;
+/* Nova estrutura de Velas e Fogos Tridimensionais */
+.candles {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  z-index: 3;
 }
-.candle{ width:6px; height:40px; background: linear-gradient(180deg,#fff7d6,#ffe08a); border-radius:2px; position:relative; box-shadow: 0 0 0 1px rgba(0,0,0,.03);}
-.candle::before{ content:''; position:absolute; top:-3px; left:1px; width:4px; height:3px; background:#333; border-radius:50%;}
-.flame{
-  position:absolute; top:-22px; left:50%; transform:translateX(-50%);
-  width:12px; height:20px;
-  background: radial-gradient(ellipse at 50% 70%, #fff6c8 0%, #ffd23f 45%, #ff8a2b 80%, transparent 100%);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: flicker 1s ease-in-out infinite alternate;
+
+.candle {
+  background: #ffffff;
+  border-radius: 10px;
+  position: relative;
+  width: 6px;
+  height: 38px;
+  backface-visibility: hidden;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.03);
+}
+
+/* Listras vermelhas da vela tridimensional */
+.candle:after,
+.candle:before {
+  background: rgba(255, 0, 0, 0.4);
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2.22px;
+}
+.candle:after { top: 25%; left: 0; }
+.candle:before { top: 55%; left: 0; }
+
+/* Agrupamento das chamas (fuego) */
+.flame-group {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  margin-left: -3.3px;
+  width: 6.66px;
+  height: 18px;
   transition: opacity .5s ease, transform .5s ease;
 }
-@keyframes flicker{
-  0%{ transform:translateX(-50%) scale(1) rotate(-2deg); opacity:1;}
-  50%{ transform:translateX(-48%) scale(1.08) rotate(2deg); opacity:.9;}
-  100%{ transform:translateX(-52%) scale(.96) rotate(-1deg); opacity:1;}
+
+.flame {
+  border-radius: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
-.cake-wrap.blown .flame{ opacity:0; transform:translateX(-50%) scale(0) translateY(6px); }
+
+/* Camadas de animação do fogo tridimensional */
+.flame:nth-child(1) { animation: fuego 2s infinite; }
+.flame:nth-child(2) { animation: fuego 1.5s infinite; }
+.flame:nth-child(3) { animation: fuego 1s infinite; }
+.flame:nth-child(4) { animation: fuego 0.5s infinite; }
+.flame:nth-child(5) { animation: fuego 0.2s infinite; }
+
+@keyframes fuego {
+  0%, 100% {
+    background: rgba(254, 248, 97, 0.6);
+    box-shadow: 0 0 20px 6px rgba(248, 233, 209, 0.4), 0 -4px 10px rgba(255, 50, 0, 0.3);
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    background: rgba(255, 50, 0, 0.3);
+    box-shadow: 0 0 30px 12px rgba(248, 233, 209, 0.2), 0 -8px 15px rgba(255, 100, 0, 0.4);
+    transform: translateY(-4px) scale(0.9) rotate(2deg);
+  }
+}
+
+/* Quando o bolo é assoprado, some com o grupo de chamas */
+.cake-wrap.blown .flame-group { 
+  opacity: 0; 
+  transform: scale(0) translateY(6px); 
+  pointer-events: none;
+}
+
 .smoke{
-  position:absolute; top:-24px; left:50%; transform:translateX(-50%);
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
   width:6px; height:6px; border-radius:50%;
   background: rgba(255,255,255,.55);
   opacity:0; pointer-events:none;
@@ -156,6 +220,7 @@ button.next-btn:active{ transform: translateY(0) scale(.98); }
   0%{ opacity:.8; transform:translateX(-50%) translateY(0) scale(1);}
   100%{ opacity:0; transform:translateX(-50%) translateY(-40px) scale(3);}
 }
+
 .tap-hint{
   margin-top:22px; color:#e9dcff; font-size:13px; opacity:.7; text-align:center;
 }
